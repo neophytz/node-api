@@ -27,6 +27,7 @@ app.use('/user', require('./src/routes/user_route'));
  * coffee
  */
 app.use('/staff', require('./src/routes/staff_route'));
+app.use('/org', require('./src/routes/organization_route'));
 
 app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`);
@@ -38,9 +39,7 @@ mongoose.Promise = global.Promise;
 const _option = {
     socketTimeoutMS: 0,
     keepAlive: true,
-    reconnectTries: 30,
     useNewUrlParser: true,
-    poolSize: 4
 };
 
 mongoose.connect(DB_URI, _option).then(()=> console.log(`DB connected`)).catch(err=> {
