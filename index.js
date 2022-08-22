@@ -4,6 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const staffAuthMiddleware = require('./src/middleware/auth_middleware');
 // import it using require.
 // we use an already available framework that 
 // will help us create our backend web server.
@@ -26,7 +27,7 @@ app.use('/user', require('./src/routes/user_route'));
  * chai 
  * coffee
  */
-app.use('/staff', require('./src/routes/staff_route'));
+app.use('/staff', staffAuthMiddleware, require('./src/routes/staff_route'));
 app.use('/org', require('./src/routes/organization_route'));
 
 app.listen(PORT, () => {

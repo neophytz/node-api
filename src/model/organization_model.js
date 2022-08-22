@@ -9,12 +9,12 @@ const Schema = mongoose.Schema;
  * 1. description and rules for schema
  * 2. [optional] - options | additional details
 */
-
+// schema - skeleton of collection or table
 const _organizationSchema = new Schema({
         name: {
             type: String,
             required: true, // mongodb will make sure that this value is not empty!! [undefined | null | ""],
-            trim: true,
+            trim: true, // 'samarth mishra'
         },
         address: {
             type: Object,

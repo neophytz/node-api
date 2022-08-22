@@ -1,15 +1,42 @@
 const http_formatter = require('../_util/formatter');
 const Organization = require('../model/organization_model');
 
-const organizationGet = (request, response) => {
-    // some work!! some processing!!
-    return response.json({
-        message: 'ok',
-        data: [
-            'nidhi', 'mohit', 'sahil', 'nikhil'
-        ]
+const organizationGet = (request, response) => { 
+    // dynamics method of handling query parameters in request
+    // console.log(request.query);
+    // let query_obj1;
+    // if(Object.keys(request.query).length > 0) {
+    //     query_obj1 = request.query;
+    // } else {
+    //     query_obj1 = {};
+    // }
+    // console.log(query_obj1);
+
+    const query_obj = (Object.keys(request.query).length > 0) ? request.query : {}; // all entries
+    Organization.find(query_obj).then(data => {
+        return response.status(200).json(
+            http_formatter(data)
+        )
+    }).catch(err => {
+        return response.status(400).json(
+            http_formatter(err, "Document validation failed", false)
+        )
     })
 }
+
+const getOrgById = (request, response) => {
+    const {organization_id} = request.params;
+    Organization.findById(organization_id).then(data => {
+        return response.status(200).json(
+            http_formatter(data)
+        )
+    }).catch(err => {
+        return response.status(400).json(
+            http_formatter(err, "No record found", false)
+        )
+    })
+}
+
 
 const organizationPost = (request, response) => {
     // validation;
@@ -45,4 +72,4 @@ const organizationPost = (request, response) => {
 
 }
 
-module.exports = {organizationGet, organizationPost};
+module.exports = {organizationGet, organizationPost, getOrgById};
