@@ -13,7 +13,47 @@ const organizationGet = (request, response) => {
     // console.log(query_obj1);
 
     const query_obj = (Object.keys(request.query).length > 0) ? request.query : {}; // all entries
-    Organization.find(query_obj).then(data => {
+
+    // const {line1} = request.query;
+
+    // how to query on nested object properties
+    // query = {"address.line": line1}
+
+    // .sort({name: 'desc', createdAt: 'desc'}) // asc or desc || ascending or descending
+    // .sort({name: -1}) // 1 = ascending or -1 = descending
+    // .sort('-name createdAt') // '-name' : descending | 'name' : ascending
+
+    // {} -> all
+    
+    // gt -> greater than (>) | lt -> less than (<)
+    // gte -> greater than and equals (>=) | lte -> less than and equal (<=)
+
+    // .where('address.pincode').gte(110030)
+    // object method
+    /*
+     {
+        "address.pincode": {
+            $gte: 110030
+        }
+        
+        ! complex queries using object method
+        name: "NSUT",
+        "address.pincode": {
+            $lte: 110045,
+            $gte: 110040
+        }
+    }
+
+    * same query using methods.
+    .where('name').equals('NSUT')
+    .where('address.pincode').gte(110040).lte(110045)
+    */
+
+
+    Organization
+    .find({})
+    .sort('-phone')
+    .then(data => {
         return response.status(200).json(
             http_formatter(data)
         )
@@ -41,7 +81,7 @@ const getOrgById = (request, response) => {
 const organizationPost = (request, response) => {
     // validation;
     const _errors = [];
-    ['address', 'phone', 'email'].forEach(key => {
+    ['name','address', 'phone', 'email'].forEach(key => {
         if(!request.body[key]){
             _errors.push(`${key} is required. Please dedo.`);
         }
