@@ -101,6 +101,8 @@ const organizationGet = (request, response) => {
     //    .limit(perPage) // limits the number of documents 
     //    .skip(perPage * (pageNo - 1)) // skips the 
 
+    // .populate()
+    // foreign key concept
 
     Organization
     .find({})
@@ -163,4 +165,56 @@ const organizationPost = (request, response) => {
 
 }
 
-module.exports = {organizationGet, organizationPost, getOrgById};
+// update method
+const organisationUpdate = (request, response) => {
+    const {  organization_id } = request.params;
+    const query = { _id: organization_id } 
+
+    // const marks = [1,2,3,4];
+    // const marks2 = [...marks, 5];
+
+    // spread operator -> ...
+    // const person = {
+    //     name: 'sachin',
+    //     age: 12,
+    // }
+
+    // const person2 = {
+    //     name: person.name,
+    //     age: person.age,
+    //     gender: 'Male'
+    // }
+
+    // const bestPerson = {...person, gender: 'Male'};
+
+
+    // mistake!! -> if email is null or undefined from body;
+    const {name, email, address} = request.body;
+    Organization.findOneAndUpdate(query, {name, email, address})
+    .then(data => response.status(200).json(http_formatter(data, "Organisation updated successfully")))
+    .catch(error => response.status(400).json(http_formatter(error, "Something went wrong", false)))
+
+}
+
+const organisationDelete = (request, response) => {
+    const {organization_id} = request.params;
+    if(!organization_id) {
+        return response.status(400).json(http_formatter({}, "Invalid organisation ID, no record found", false));
+    }
+
+    /**
+     * findByIdAndRemove : returns the deleted document
+     * findOneAndDelete: return the deleted document
+     * deleteOne: only return the acknowledgement and delete count.
+    */ 
+
+    // ! -> we must only use delete operation when we are sure about the fact that the document 
+    // ! -> has 0 / no dependency in entire software and database.
+    Organization.deleteOne({
+        _id: organization_id
+    })
+    .then(data => response.status(200).json(http_formatter(data, "Organisation removed successfully")))
+    .catch(error => response.status(400).json(http_formatter(error, "Something went wrong", false)))
+}
+
+module.exports = {organizationGet, organizationPost, getOrgById, organisationDelete, organisationUpdate};
