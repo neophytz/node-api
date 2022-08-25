@@ -47,12 +47,63 @@ const organizationGet = (request, response) => {
     * same query using methods.
     .where('name').equals('NSUT')
     .where('address.pincode').gte(110040).lte(110045)
+
+    .select('name phone email -_id') // when we want to send selected feilds to the user, we use select()
+    .sort('-createdAt') // if we have not seleected the feild, sort will not work!!
+
     */
+
+   // paginataion
+   // total -> 100
+   // photos per page -> 10
+   // page -> 10
+
+   /**
+    * TOTAL - 100
+    * PER_PAGE - 10
+    * TOTAL_PAGE - 10
+    * 
+    * CURRENT_PAGE - 10
+    * 
+    * 
+    * 
+    * PAGE - 1
+    * 1 - 10
+    * 
+    * ! formula
+    * PER_PAGE * (PAGE_NO - 1) + 1 _____ PER_PAGE * PAGE_NO
+    * 2
+    * 10
+    * 
+    * 
+    * (10 * 2-1) + 1 ____ 10 * 2
+    * 11 - 20
+    * 
+    * (10 * 5-1) + 1 ____ 10 * 5
+    * 41 - 50
+    * 
+    * 
+    * PAGE - 2
+    * 11 - 20
+    * 
+    * PAGE_NO - 5
+    * 41 - 50
+    * 
+    */
+
+   // doc_count
+   // page_number
+   
+    //    let {perPage, pageNo} = request.query;
+    //    pageNo ||= 1;
+    //    perPage ||= 2;
+    //    .count() // is same is arr.length
+    //    .limit(perPage) // limits the number of documents 
+    //    .skip(perPage * (pageNo - 1)) // skips the 
 
 
     Organization
     .find({})
-    .sort('-phone')
     .then(data => {
         return response.status(200).json(
             http_formatter(data)
